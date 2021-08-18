@@ -1,0 +1,10 @@
+#include "syscall.h"
+
+int
+main()
+{
+    char buffer[200];
+    ReadString(buffer, 200);
+    Halt();
+    return 0;
+}
