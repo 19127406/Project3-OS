@@ -20,39 +20,6 @@
 //	memory, and jump to it.
 //----------------------------------------------------------------------
 
-
-// StartProcess ta cast Thread về đúng kiểu của nó.
-void StartProcess_2(int id)
-{
-    char* fileName = pTab->GetFileName(id);
-    OpenFile *executable = fileSystem->Open(filename);
-    AddrSpace *space;
-
-    if (executable == NULL) {
-	printf("Unable to open file %s\n", filename);
-	return;
-    }
-
-    space = new AddrSpace(executable);
-
-    if(space == NULL)
-    {
-	printf("\nPCB::Exec : Can't create AddSpace.");
-	return;
-    }
-
-    currentThread->space = space;
-
-    delete executable;
-
-    space->InitRegisters();		
-    space->RestoreState();		
-
-    machine->Run();		
-    ASSERT(FALSE);		
-}
-
-
 void
 StartProcess(char *filename)
 {

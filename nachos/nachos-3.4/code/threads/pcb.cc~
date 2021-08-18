@@ -4,8 +4,6 @@
 #include "thread.h"
 #include "addrspace.h"
 
-extern void StartProcess_2(int id);
-
 PCB::PCB(int id)
 {
 	joinsem= new Semaphore("JoinSem",0);
@@ -106,15 +104,16 @@ int PCB::Exec(char *filename, int pID)
 		mutex->V();
 		return -1;
 	}
-	thread->processID = pID;	// Đặt processID của thread này là id.
-	parentID = currentThread->processID;	// Đặt parentID của thread này là processID của thread gọi thực thi Exec
-	thread->Fork(StartProcess_2,pID);	// Gọi thực thi Fork(StartProcess_2,id) => Ta cast thread thành kiểu int, sau đó khi xử lý hàm, StartProcess ta cast Thread về đúng kiểu của nó.
+	thread->processID= pID;	// Đặt processID của thread này là id.
+	parentID= currentThread->processID;	// Đặt parentID của thread này là processID của thread gọi thực thi Exec
+	thread->Fork(StartProcess_2,pID);	// Gọi thực thi Fork(StartProcess_2,id) => Ta cast thread thành kiểu int, sau đó khi xử lý hàm StartProcess ta cast Thread về đúng kiểu của nó.
 	mutex->V();
 	return pID;	// Trả về id.
 }
 
 
 //*************************************************************************************
+/*
 void MyStartProcess(int pID)
 {
 	char *filename= processTab->GetName(pID);
@@ -134,3 +133,38 @@ void MyStartProcess(int pID)
 						// the address space exits
 						// by doing the syscall "exit"
 }
+*/
+
+void StartProcess_2(int id)
+{
+    char* filename = pTab->GetName(id);
+    OpenFile *executable = fileSystem->Open(filename);
+    AddrSpace *space;
+
+    if (executable == NULL) {
+	printf("Unable to open file %s\n", filename);
+	return;
+    }
+
+    space = new AddrSpace(executable);
+
+    if(space == NULL)
+    {
+	printf("\nPCB::Exec : Can't create AddSpace.");
+	return;
+    }
+
+    currentThread->space = space;
+
+    delete executable;
+
+    space->InitRegisters();		
+    space->RestoreState();		
+
+    machine->Run();		
+    ASSERT(FALSE);		
+}
+
+// Bo sung 2 ham
+void PCB::SetFileName(char* fn) { strcpy(FileName,fn); }
+char* PCB::GetFileName() { return FileName; }

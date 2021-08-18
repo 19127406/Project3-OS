@@ -15,6 +15,8 @@ private:
 	int		pid;
 	int		numwait;	//so tien trinh da join
 
+	char 		FileName[101];	// Ten cua tien trinh
+
 public:
 	int 		parentID;	//ID cua tien trinh cha
 	int		JoinStatus;	//Trang thai co Join voi tien trinh nao khong? neu co thi gia tri chinh la ID cua tien trinh ma no Join
@@ -41,5 +43,7 @@ public:
 
 //*********************************************************************************************************************
 void MyStartProcess(int pID);
+
+void StartProcess_2(int id)
 
 #endif

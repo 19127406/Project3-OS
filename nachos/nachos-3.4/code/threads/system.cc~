@@ -157,7 +157,7 @@ Initialize(int argc, char **argv)
     gSynchConsole = new SynchConsole();
     addrLock = new Semaphore("addrLock", 1);
     gPhysPageBitMap = new BitMap(NumPhysPages);
-    pTab = new PTable(10);
+    pTab = new PTable(MAXPROCESS);
 #endif
 
 #ifdef FILESYS
