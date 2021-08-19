@@ -43,9 +43,9 @@ int PTable::ExecUpdate(char* filename)
 ////////////////////////////////////////////////////////////
 
 //Kiem tra chuong trinh duoc goi co la chinh no khong
-	if(!strcmp(filename,currentThread->getName()))
+	if(strcmp(filename,currentThread->getName()) == 0)
 	{
-		printf("\nLoi: khong duoc phep goi exce chinh no !!!\n");
+		printf("\nLoi: khong duoc phep goi exec chinh no !!!\n");
 		bmsem->V();
 		return -1;
 	}
@@ -62,7 +62,12 @@ int PTable::ExecUpdate(char* filename)
 ////////////////////////////////////////////////////////////
 
 	pcb[ID]= new PCB(ID);
-	bm->Mark(ID);
+
+	// parentID là processID của currentThread.
+	pcb[ID]->parentID = currentThread->processID;
+
+	bm->Mark(ID);	// Đánh dấu đã sử dụng.
+
 	int pID= pcb[ID]->Exec(filename,ID);
 
 	bmsem->V();

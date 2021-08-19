@@ -23,7 +23,9 @@ class AddrSpace {
     AddrSpace(OpenFile *executable);	// Create an address space,
 					// initializing it with the program
 					// stored in the file "executable"
+
     AddrSpace(char* filename);
+
     ~AddrSpace();			// De-allocate an address space
 
     void InitRegisters();		// Initialize user-level CPU registers,
@@ -38,5 +40,8 @@ class AddrSpace {
     unsigned int numPages;		// Number of pages in the virtual 
 					// address space
 };
+
+unsigned int FindAnEmptyPageAndMark();
+int CountEmptyPage();
 
 #endif // ADDRSPACE_H

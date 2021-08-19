@@ -137,23 +137,29 @@ void MyStartProcess(int pID)
 
 void StartProcess_2(int id)
 {
-    char* filename = pTab->GetName(id);
-    AddrSpace *space= new AddrSpace(filename);
-    if(space == NULL)
-    {
-	printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
-	return; 
-    }
+   	char* filename = pTab->GetName(id);
+  	AddrSpace *space= new AddrSpace(filename);
+    	if(space == NULL)
+    	{
+		printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
+		return; 
+    	}
+	currentThread->space= space;
 
-    currentThread->space = space;
+	space->InitRegisters();		// set the initial register values
+	space->RestoreState();		// load page table register
 
-    space->InitRegisters();		
-    space->RestoreState();		
-
-    machine->Run();		
-    ASSERT(FALSE);		
+	machine->Run();			// jump to the user progam
+	ASSERT(FALSE);			// machine->Run never returns;
+						// the address space exits
+						// by doing the syscall "exit"	
 }
 
 // Bo sung 2 ham
-void PCB::SetFileName(char* fn) { strcpy(FileName,fn); }
+void PCB::SetFileName(char* fn) { 
+	memset(FileName, 0, sizeof(FileName));
+	strcpy(FileName, fn);
+}
+
 char* PCB::GetFileName() { return FileName; }
+
