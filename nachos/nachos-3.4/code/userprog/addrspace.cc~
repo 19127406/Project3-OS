@@ -96,11 +96,6 @@ AddrSpace::AddrSpace(OpenFile *executable)
     numPages = divRoundUp(size, PageSize);
     size = numPages * PageSize;
 
-    ASSERT(numPages <= NumPhysPages);		// check we're not trying
-						// to run anything too big --
-						// at least until we have
-						// virtual memory
-
     // Thêm đoạn code
     if (numPages > CountEmptyPage()) {	// tính Số trang còn trống
      	printf("\nAddrSpace:Load: not enough memory for new process..!");
@@ -109,6 +104,11 @@ AddrSpace::AddrSpace(OpenFile *executable)
      	addrLock->V();	// addrLock->Release();
      	return ;
     }
+
+    ASSERT(numPages <= NumPhysPages);		// check we're not trying
+						// to run anything too big --
+						// at least until we have
+						// virtual memory
 
     DEBUG('a', "Initializing address space, num pages %d, size %d\n", 
 					numPages, size);

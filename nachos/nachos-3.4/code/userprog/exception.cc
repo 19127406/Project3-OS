@@ -320,7 +320,6 @@ ExceptionHandler(ExceptionType which)
 
 				case SC_Exec:
 				{
-					int result;
 					int virtAddr = machine->ReadRegister(4); // Đọc địa chỉ tên chương trình “name” từ thanh ghi r4.
 					// Tên chương trình lúc này đang ở trong user space. Gọi hàm User2System đã được khai báo để chuyển vùng nhớ user space tới vùng nhớ system space.
 					char* buffer = User2System(virtAddr, MAX_STRING_LENGTH);
@@ -331,12 +330,26 @@ ExceptionHandler(ExceptionType which)
 					}
 					// Nếu không có lỗi thì gọi pTab.ExecUpdate(name), trả về và lưu kết quả thực thi phương thức này vào thanh ghi r2.
 					else {
-						result = pTab->ExecUpdate(buffer);
+						int result = pTab->ExecUpdate(buffer);
 						machine->WriteRegister(2, result);
 					}
 					delete buffer;
 					IncreasePC();
 					return;	
+				}
+
+				case SC_Join:
+				{       
+					// int Join(SpaceId id)
+					// Input: id dia chi cua thread
+					// Output: 
+					int id = machine->ReadRegister(4);
+			
+					int res = pTab->JoinUpdate(id);
+			
+					machine->WriteRegister(2, res);
+					IncreasePC();
+					return;
 				}
 
 				case SC_Ping:

@@ -138,16 +138,7 @@ void MyStartProcess(int pID)
 void StartProcess_2(int id)
 {
     char* filename = pTab->GetName(id);
-    OpenFile *executable = fileSystem->Open(filename);
-    AddrSpace *space;
-
-    if (executable == NULL) {
-	printf("Unable to open file %s\n", filename);
-	return;
-    }
-
-    space = new AddrSpace(executable);
-
+    AddrSpace *space= new AddrSpace(filename);
     if(space == NULL)
     {
 	printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
@@ -155,8 +146,6 @@ void StartProcess_2(int id)
     }
 
     currentThread->space = space;
-
-    delete executable;
 
     space->InitRegisters();		
     space->RestoreState();		

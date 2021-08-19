@@ -39,4 +39,7 @@ class AddrSpace {
 					// address space
 };
 
+unsigned int FindAnEmptyPageAndMark();
+int CountEmptyPage();
+
 #endif // ADDRSPACE_H
