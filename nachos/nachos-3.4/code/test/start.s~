@@ -194,6 +194,30 @@ Ascii:
  	j	$31
  	.end Ascii
 
+  	.globl Ping
+ 	.ent	Ping
+Ping:
+ 	addiu $2,$0,SC_Ping
+ 	syscall
+ 	j	$31
+ 	.end Ping
+
+  	.globl Pong
+ 	.ent	Pong
+Pong:
+ 	addiu $2,$0,SC_Pong
+ 	syscall
+ 	j	$31
+ 	.end Pong
+
+  	.globl Scheduler
+ 	.ent	Scheduler
+Scheduler:
+ 	addiu $2,$0,SC_Scheduler
+ 	syscall
+ 	j	$31
+ 	.end Scheduler
+
 /* dummy function to keep gcc happy */
         .globl  __main
         .ent    __main

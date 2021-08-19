@@ -38,6 +38,9 @@
 #define SC_Help			17
 #define SC_Ascii		18
 #define SC_Sort			19
+#define SC_Ping		20
+#define SC_Pong		21
+#define SC_Scheduler		22
 
 #ifndef IN_ASM
 
@@ -144,6 +147,10 @@ void PrintString (char buffer[]);
 void Help();
 void Ascii();
 void Sort(int* arr, int n);	
+
+void Ping();
+void Pong();
+void Scheduler();
 
 #endif /* IN_ASM */
 
