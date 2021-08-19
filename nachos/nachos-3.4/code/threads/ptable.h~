@@ -7,7 +7,7 @@
 
 #define MAXPROCESS 10
 
-class PTable
+;class PTable
 {
 private:
 	BitMap		*bm;

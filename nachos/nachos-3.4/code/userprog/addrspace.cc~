@@ -62,13 +62,20 @@ SwapHeader (NoffHeader *noffH)
 
 
 // hàm tìm 1 trang trống và đánh dấu đã sử dụng
-unsigned int FindAnEmptyPageAndMark() 
-{
+unsigned int FindAnEmptyPageAndMark() {
 	unsigned int EmptySlot;
   	EmptySlot = gPhysPageBitMap->Find();
 	gPhysPageBitMap->Mark(EmptySlot);
 	return EmptySlot;
 }
+
+// hàm tính Số trang còn trống
+int CountEmptyPage() {
+	int count;
+	count = gPhysPageBitMap->NumClear();
+	return count;
+}
+
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
@@ -95,7 +102,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 						// virtual memory
 
     // Thêm đoạn code
-    if (numPages > gPhysPageBitMap->NumClear()) {	// tính Số trang còn trống
+    if (numPages > CountEmptyPage()) {	// tính Số trang còn trống
      	printf("\nAddrSpace:Load: not enough memory for new process..!");
      	numPages = 0;
      	delete executable;
@@ -236,7 +243,7 @@ AddrSpace::AddrSpace(char* filename)
 	size = numPages * PageSize;
 // Check the available memory enough to load new process
 //debug
-	if (numPages > gPhysPageBitMap->NumClear()){
+	if (numPages > CountEmptyPage()){
 		printf("\nAddrSpace:Load: not enough memory for new process..!");
 		numPages = 0;
 		delete executable;
