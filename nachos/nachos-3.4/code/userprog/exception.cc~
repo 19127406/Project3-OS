@@ -317,6 +317,45 @@ ExceptionHandler(ExceptionType which)
 					IncreasePC();
 					return;
 				}	
+
+				case SC_Exec:
+				{
+					int result;
+					int virtAddr = machine->ReadRegister(4); // Đọc địa chỉ tên chương trình “name” từ thanh ghi r4.
+					// Tên chương trình lúc này đang ở trong user space. Gọi hàm User2System đã được khai báo để chuyển vùng nhớ user space tới vùng nhớ system space.
+					char* buffer = User2System(virtAddr, MAX_STRING_LENGTH);
+					// Nếu bị lỗi thì báo “Không mở được file” và gán -1 vào thanh ghi 2.	
+					if (buffer == NULL) {
+						printf("\nError: Cannot open file.\n");
+						machine->WriteRegister(2, -1);				
+					}
+					// Nếu không có lỗi thì gọi pTab.ExecUpdate(name), trả về và lưu kết quả thực thi phương thức này vào thanh ghi r2.
+					else {
+						result = pTab->ExecUpdate(buffer);
+						machine->WriteRegister(2, result);
+					}
+					delete buffer;
+					IncreasePC();
+					return;	
+				}
+
+				case SC_Ping:
+				{
+					IncreasePC();
+					return;
+				}	
+
+				case SC_Pong:
+				{
+					IncreasePC();
+					return;
+				}	
+
+				case SC_Scheduler:
+				{
+					IncreasePC();
+					return;
+				}	
 			}
 			break;
 	

@@ -150,8 +150,8 @@ void StartProcess_2(int id)
 
     if(space == NULL)
     {
-	printf("\nPCB::Exec : Can't create AddSpace.");
-	return;
+	printf("\nLoi: Khong du bo nho de cap phat cho tien trinh !!!\n");
+	return; 
     }
 
     currentThread->space = space;
