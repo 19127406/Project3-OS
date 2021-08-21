@@ -11,6 +11,8 @@ PTable::PTable(int size)
 	for(i = 0 ; i < MAXPROCESS ; ++i)
 		pcb[i] = NULL;
 	bm->Mark(0);
+
+	pcb[0] = new PCB(0);
 }
 
 PTable::~PTable()
@@ -43,7 +45,7 @@ int PTable::ExecUpdate(char* filename)
 ////////////////////////////////////////////////////////////
 
 //Kiem tra chuong trinh duoc goi co la chinh no khong
-	if(strcmp(filename,currentThread->getName()) == 0)
+	if(!strcmp(filename,currentThread->getName()))
 	{
 		printf("\nLoi: khong duoc phep goi exec chinh no !!!\n");
 		bmsem->V();
@@ -62,6 +64,8 @@ int PTable::ExecUpdate(char* filename)
 ////////////////////////////////////////////////////////////
 
 	pcb[ID]= new PCB(ID);
+
+	pcb[ID]->SetFileName(filename);
 
 	// parentID là processID của currentThread.
 	pcb[ID]->parentID = currentThread->processID;
@@ -94,6 +98,8 @@ int PTable::ExitUpdate(int ec)
 /////////////////////////////////////////////////////////////
 
 	pcb[pID]->SetExitCode(ec);
+
+	pcb[pcb[pID]->parentID]->DecNumWait();
 	
 	if(pcb[pID]->JoinStatus != -1)
 	{
@@ -101,7 +107,7 @@ int PTable::ExitUpdate(int ec)
 		pcb[pID]->ExitWait();
 		Remove(pID);	
 	}
-	else
+	else 
 		Remove(pID);
 	return ec;
 }
@@ -129,6 +135,7 @@ int PTable::JoinUpdate(int pID)
 	}
 /////////////////////////////////////////////////////////////////////////////////////////////
 	
+	pcb[pcb[pID]->parentID]->IncNumWait();
 
 	pcb[pID]->JoinWait(); 	//doi den khi tien trinh con ket thuc
 
@@ -171,6 +178,7 @@ bool PTable::IsExist(int pID)
 
 char* PTable::GetName(int pID)
 {
-	if(pID>=0 && pID<10 && bm->Test(pID))
-		return pcb[pID]->GetNameThread();
+	//if(pID>=0 && pID<10 && bm->Test(pID))
+	//	return pcb[pID]->GetNameThread();
+	return pcb[pID]->GetFileName();
 }

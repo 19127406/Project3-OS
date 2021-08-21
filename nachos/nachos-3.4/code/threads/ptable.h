@@ -6,6 +6,8 @@
 #include "synch.h"
 
 #define MAXPROCESS 10
+#define MAX_PROCESS 10
+
 
 ;class PTable
 {
