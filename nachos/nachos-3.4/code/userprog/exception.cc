@@ -339,6 +339,9 @@ ExceptionHandler(ExceptionType which)
 				}
 
 				case SC_Join:
+					// Input: id cua thread
+					// Ouput: exitcode
+					// Usage: dung class PCB va PTable de wait va block tien trinh theo id cua thread
 				{       
 					int id = machine->ReadRegister(4);
 					int res = pTab->JoinUpdate(id);
